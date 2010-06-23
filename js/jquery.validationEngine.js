@@ -244,7 +244,7 @@ $.validationEngine = {
 			var fn = window[funce];
 			if (typeof(fn) === 'function'){
 				var fn_result = fn();
-				$.validationEngine.isError = fn_result;
+				$.validationEngine.isError = $.validationEngine.isError || fn_result;
 				promptText += $.validationEngine.settings.allrules[customRule].alertText+"<br />";
 			}
 		}
