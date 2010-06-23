@@ -559,7 +559,7 @@ $.validationEngine = {
 
 			if(!$("."+linkTofield).hasClass("ajaxed")){	// DO NOT UPDATE ALREADY AJAXED FIELDS (only happen if no normal errors, don't worry)
 				var validationPass = $.validationEngine.loadValidation(this);
-				return(validationPass) ? stopForm = true : "";
+				return(validationPass) ? "" : stopForm = true;
 			};
 		});
 		ajaxErrorLength = $.validationEngine.ajaxValidArray.length;		// LOOK IF SOME AJAX IS NOT VALIDATE
