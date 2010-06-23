@@ -123,7 +123,7 @@ $.validationEngine = {
 		caller = caller;
 		ajaxValidate = false;
 		var callerName = $(caller).attr("name");
-		$.validationEngine.isError = false;
+		$.validationEngine.isValid = true;
 		$.validationEngine.showTriangle = true;
 		callerType = $(caller).attr("type");
 
@@ -132,7 +132,7 @@ $.validationEngine = {
 			case "optional": 
 				if(!$(caller).val()){
 					$.validationEngine.closePrompt(caller);
-					return $.validationEngine.isError;
+					return $.validationEngine.isValid;
 				}
 			break;
 			case "required": 
@@ -172,7 +172,7 @@ $.validationEngine = {
 			};
 		};
 		radioHack();
-		if ($.validationEngine.isError == true){
+		if ($.validationEngine.isValid == false){
 			linkTofield = $.validationEngine.linkTofield(caller);
 
 			($("div."+linkTofield).size() ==0) ? $.validationEngine.buildPrompt(caller,promptText,"error") : $.validationEngine.updatePromptText(caller,promptText);
@@ -191,7 +191,7 @@ $.validationEngine = {
 			if (callerType == "text" || callerType == "password" || callerType == "textarea"){
 
 				if(!$(caller).val()){
-					$.validationEngine.isError = true;
+					$.validationEngine.isValid = false;
 					promptText += $.validationEngine.settings.allrules[rules[i]].alertText+"<br />";
 				}
 			}
@@ -199,7 +199,7 @@ $.validationEngine = {
 				callerName = $(caller).attr("name");
 
 				if($("input[name='"+callerName+"']:checked").size() == 0) {
-					$.validationEngine.isError = true;
+					$.validationEngine.isValid = false;
 					if($("input[name='"+callerName+"']").size() ==1) {
 						promptText += $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxe+"<br />"; 
 					}else{
@@ -209,13 +209,13 @@ $.validationEngine = {
 			}
 			if (callerType == "select-one") { // added by paul@kinetek.net for select boxes, Thank you
 				if(!$(caller).val()) {
-					$.validationEngine.isError = true;
+					$.validationEngine.isValid = false;
 					promptText += $.validationEngine.settings.allrules[rules[i]].alertText+"<br />";
 				}
 			}
 			if (callerType == "select-multiple") { // added by paul@kinetek.net for select boxes, Thank you
 				if(!$(caller).find("option:selected").val()) {
-					$.validationEngine.isError = true;
+					$.validationEngine.isValid = false;
 					promptText += $.validationEngine.settings.allrules[rules[i]].alertText+"<br />";
 				}
 			}
@@ -225,14 +225,14 @@ $.validationEngine = {
 			pattern = eval($.validationEngine.settings.allrules[customRule].regex);
 
 			if(!pattern.test($(caller).attr('value'))){
-				$.validationEngine.isError = true;
+				$.validationEngine.isValid = false;
 				promptText += $.validationEngine.settings.allrules[customRule].alertText+"<br />";
 			}
 		}
 		function _exemptString(caller,rules,position){		// VALIDATE REGEX RULES
 			customString = rules[position+1];
 			if(customString == $(caller).attr('value')){
-				$.validationEngine.isError = true;
+				$.validationEngine.isValid = false;
 				promptText += $.validationEngine.settings.allrules['required'].alertText+"<br />";
 			}
 		}
@@ -244,7 +244,7 @@ $.validationEngine = {
 			var fn = window[funce];
 			if (typeof(fn) === 'function'){
 				var fn_result = fn();
-				$.validationEngine.isError = $.validationEngine.isError || fn_result;
+				$.validationEngine.isValid = $.validationEngine.isValid && fn_result;
 				promptText += $.validationEngine.settings.allrules[customRule].alertText+"<br />";
 			}
 		}
@@ -256,7 +256,7 @@ $.validationEngine = {
 			ajaxCaller = caller;
 			fieldId = $(caller).attr("id");
 			ajaxValidate = true;
-			ajaxisError = $.validationEngine.isError;
+			ajaxisError = !$.validationEngine.isValid;
 
 			if($.validationEngine.settings.allrules[customAjaxRule].extraData){
 				extraData = $.validationEngine.settings.allrules[customAjaxRule].extraData;
@@ -331,7 +331,7 @@ $.validationEngine = {
 			confirmField = rules[position+1];
 
 			if($(caller).attr('value') != $("#"+confirmField).attr('value')){
-				$.validationEngine.isError = true;
+				$.validationEngine.isValid = false;
 				promptText += $.validationEngine.settings.allrules["confirm"].alertText+"<br />";
 			}
 		}
@@ -342,7 +342,7 @@ $.validationEngine = {
 			feildLength = $(caller).attr('value').length;
 
 			if(feildLength<startLength || feildLength>endLength){
-				$.validationEngine.isError = true;
+				$.validationEngine.isValid = false;
 				promptText += $.validationEngine.settings.allrules["length"].alertText+startLength+$.validationEngine.settings.allrules["length"].alertText2+endLength+$.validationEngine.settings.allrules["length"].alertText3+"<br />"
 			}
 		}
@@ -353,7 +353,7 @@ $.validationEngine = {
 			groupSize = $("input[name='"+groupname+"']:checked").size();
 			if(groupSize > nbCheck){
 				$.validationEngine.showTriangle = false;
-				$.validationEngine.isError = true;
+				$.validationEngine.isValid = false;
 				promptText += $.validationEngine.settings.allrules["maxCheckbox"].alertText+"<br />";
 			}
 		}
@@ -364,12 +364,12 @@ $.validationEngine = {
 			groupSize = $("input[name='"+groupname+"']:checked").size();
 			if(groupSize < nbCheck){
 
-				$.validationEngine.isError = true;
+				$.validationEngine.isValid = false;
 				$.validationEngine.showTriangle = false;
 				promptText += $.validationEngine.settings.allrules["minCheckbox"].alertText+" "+nbCheck+" "+$.validationEngine.settings.allrules["minCheckbox"].alertText2+"<br />";
 			}
 		}
-		return($.validationEngine.isError) ? $.validationEngine.isError : false;
+		return($.validationEngine.isValid) ? $.validationEngine.isValid : false;
 	},
 	submitForm : function(caller){
 		if($.validationEngine.settings.ajaxSubmit){
