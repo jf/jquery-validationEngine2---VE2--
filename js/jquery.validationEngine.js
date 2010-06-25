@@ -245,7 +245,9 @@ $.validationEngine = {
 			if (typeof(fn) === 'function'){
 				var fn_result = fn();
 				$.validationEngine.isValid = $.validationEngine.isValid && fn_result;
-				promptText += $.validationEngine.settings.allrules[customRule].alertText+"<br />";
+				if (!fn_result) {
+					promptText += $.validationEngine.settings.allrules[customRule].alertText+"<br />";
+				}
 			}
 		}
 		function _ajax(caller,rules,position){				// VALIDATE AJAX RULES
