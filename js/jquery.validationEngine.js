@@ -52,7 +52,7 @@
 				$.validationEngine.settings = settings;
 				if($.validationEngine.intercept == false || !$.validationEngine.intercept){		// STOP INLINE VALIDATION THIS TIME ONLY
 					$.validationEngine.onSubmitValid=false;
-					$.validationEngine.loadValidation(caller); 
+					$.validationEngine.runThroughValidation(caller); 
 				}else{
 					$.validationEngine.intercept = false;
 				}
@@ -102,7 +102,7 @@ $.validationEngine = {
 		}
 		$.validationEngine.settings = settings;
 	},
-	loadValidation : function(caller) {		// GET VALIDATIONS TO BE EXECUTED
+	runThroughValidation : function(caller) {		// GET VALIDATIONS TO BE EXECUTED
 		if(!$.validationEngine.settings){
 			$.validationEngine.defaultSetting()
 		}
@@ -560,7 +560,7 @@ $.validationEngine = {
 			linkTofield = $.validationEngine.linkTofield(this);
 
 			if(!$("."+linkTofield).hasClass("ajaxed")){	// DO NOT UPDATE ALREADY AJAXED FIELDS (only happen if no normal errors, don't worry)
-				var validationPass = $.validationEngine.loadValidation(this);
+				var validationPass = $.validationEngine.runThroughValidation(this);
 				return(validationPass) ? "" : stopForm = true;
 			};
 		});
