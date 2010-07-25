@@ -166,7 +166,7 @@ $.validationEngine = {
 				_confirm(caller,rules,i);
 			break;
 			case "funcCall":
-			_funcCall(caller,rules,i);
+				_funcCall(caller,rules,i);
 			break;
 			default :;
 			};
@@ -294,7 +294,7 @@ $.validationEngine = {
 
 						if(ajaxisError == "false"){			// DATA FALSE UPDATE PROMPT WITH ERROR;
 
-							_checkInArray(false)				// Check if ajax validation alreay used on this field
+							_setInArray(false)				// Check if ajax validation alreay used on this field
 
 							if(!existInarray){					// Add ajax error to stop submit
 								$.validationEngine.ajaxValidArray[ajaxErrorLength] =  new Array(2);
@@ -307,7 +307,7 @@ $.validationEngine = {
 							promptText += $.validationEngine.settings.allrules[customAjaxRule].alertText+"<br />";
 							$.validationEngine.updatePromptText(ajaxCaller,promptText,"",true);
 						}else{
-							_checkInArray(true);
+							_setInArray(true);
 							$.validationEngine.ajaxValid = true;
 							if(!customAjaxRule)	{$.validationEngine.debug("wrong ajax response, are you on a server or in xampp? if not delete de ajax[ajaxUser] validating rule from your form ")}
 							if($.validationEngine.settings.allrules[customAjaxRule].alertTextOk){	// NO OK TEXT MEAN CLOSE PROMPT
@@ -317,7 +317,7 @@ $.validationEngine = {
 								$.validationEngine.closePrompt(ajaxCaller);
 							}
 						}
-						function  _checkInArray(validate){
+						function  _setInArray(validate){
 							for(x=0;x<ajaxErrorLength;x++){
 								if($.validationEngine.ajaxValidArray[x][0] == fieldId){
 									$.validationEngine.ajaxValidArray[x][1] = validate;
