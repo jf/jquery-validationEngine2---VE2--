@@ -1,15 +1,15 @@
 /*
  * Inline Form Validation Engine 1.6.5, jQuery plugin
- * 
+ *
  * Copyright(c) 2009, Cedric Dugas
  * http://www.position-relative.net
  *
  * Form validation engine allowing custom regex rules to be added.
- * Thanks to Francois Duquette and Teddy Limousin 
+ * Thanks to Francois Duquette and Teddy Limousin
  * and everyone helping me find bugs on the forum
  * Licenced under the MIT Licence
  */
- 
+
 (function($) {
 
 	$.fn.validationEngine = function(settings) {
@@ -34,7 +34,7 @@
 		failure : function() {}
 	}, settings);
 	$.validationEngine.settings = settings;
-	$.validationEngine.ajaxValidArray = new Array();	// ARRAY FOR AJAX: VALIDATION MEMORY 
+	$.validationEngine.ajaxValidArray = new Array();	// ARRAY FOR AJAX: VALIDATION MEMORY
 
 	if(settings.inlineValidation == true){		// Validating Inline ?
 		if(!settings.returnIsValid){					// NEEDED FOR THE SETTING returnIsValid
@@ -52,7 +52,7 @@
 				$.validationEngine.settings = settings;
 				if($.validationEngine.intercept == false || !$.validationEngine.intercept){		// STOP INLINE VALIDATION THIS TIME ONLY
 					$.validationEngine.onSubmitValid=false;
-					$.validationEngine.runThroughValidation(caller); 
+					$.validationEngine.runThroughValidation(caller);
 				}else{
 					$.validationEngine.intercept = false;
 				}
@@ -71,14 +71,14 @@
 		if($.validationEngine.submitValidation(this,settings) == false){
 			if($.validationEngine.submitForm(this,settings) == true) {return false;}
 		}else{
-			settings.failure && settings.failure(); 
+			settings.failure && settings.failure();
 			return false;
 		}
 	})
 	$(".formError").live("click",function(){	// REMOVE BOX ON CLICK
 		$(this).fadeOut(150,function(){
 			$(this).remove();
-		}) 
+		})
 	})
 };
 $.validationEngine = {
@@ -116,7 +116,7 @@ $.validationEngine = {
 		return validateCalll;
 	},
 	validateCall : function(caller,rules) {	// EXECUTE VALIDATION REQUIRED BY THE USER FOR THIS FIELD
-		var promptText =""
+		var promptText ="";
 
 		if(!$(caller).attr("id")) { $.validationEngine.debug("This field have no ID attribut( name & class displayed): "+$(caller).attr("name")+" "+$(caller).attr("class")) }
 
@@ -129,43 +129,43 @@ $.validationEngine = {
 
 		for (i=0; i<rules.length;i++){
 			switch (rules[i]){
-			case "optional": 
+			case "optional":
 				if(!$(caller).val()){
 					$.validationEngine.closePrompt(caller);
 					return $.validationEngine.isValid;
 				}
 			break;
-			case "required": 
+			case "required":
 				_required(caller,rules);
 			break;
-			case "custom": 
+			case "custom":
 				_customRegex(caller,rules,i);
 			break;
-			case "exemptString": 
+			case "exemptString":
 				_exemptString(caller,rules,i);
 			break;
-			case "ajax": 
+			case "ajax":
 				if(!$.validationEngine.onSubmitValid){
 					_ajax(caller,rules,i);
 				};
 			break;
-			case "length": 
+			case "length":
 				_length(caller,rules,i);
 			break;
-			case "maxCheckbox": 
+			case "maxCheckbox":
 				_maxCheckbox(caller,rules,i);
 				groupname = $(caller).attr("name");
 				caller = $("input[name='"+groupname+"']");
 			break;
-			case "minCheckbox": 
+			case "minCheckbox":
 				_minCheckbox(caller,rules,i);
 				groupname = $(caller).attr("name");
 				caller = $("input[name='"+groupname+"']");
 			break;
-			case "confirm": 
+			case "confirm":
 				_confirm(caller,rules,i);
 			break;
-			case "funcCall": 
+			case "funcCall":
 			_funcCall(caller,rules,i);
 			break;
 			default :;
@@ -181,9 +181,9 @@ $.validationEngine = {
 		/* As my validation is looping input with id's we need a hack for my validation to understand to group these inputs */
 		function radioHack(){
 			if($("input[name='"+callerName+"']").size()> 1 && (callerType == "radio" || callerType == "checkbox")) {        // Hack for radio/checkbox group button, the validation go the first radio/checkbox of the group
-				caller = $("input[name='"+callerName+"'][type!=hidden]:first");     
+				caller = $("input[name='"+callerName+"'][type!=hidden]:first");
 				$.validationEngine.showTriangle = false;
-			}      
+			}
 		}
 		/* VALIDATION FUNCTIONS */
 		function _required(caller,rules){   // VALIDATE BLANK FIELD
@@ -201,7 +201,7 @@ $.validationEngine = {
 				if($("input[name='"+callerName+"']:checked").size() == 0) {
 					$.validationEngine.isValid = false;
 					if($("input[name='"+callerName+"']").size() ==1) {
-						promptText += $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxe+"<br />"; 
+						promptText += $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxe+"<br />";
 					}else{
 						promptText += $.validationEngine.settings.allrules[rules[i]].alertTextCheckboxMultiple+"<br />";
 					}
@@ -308,7 +308,7 @@ $.validationEngine = {
 							$.validationEngine.updatePromptText(ajaxCaller,promptText,"",true);
 						}else{
 							_checkInArray(true);
-							$.validationEngine.ajaxValid = true; 
+							$.validationEngine.ajaxValid = true;
 							if(!customAjaxRule)	{$.validationEngine.debug("wrong ajax response, are you on a server or in xampp? if not delete de ajax[ajaxUser] validating rule from your form ")}
 							if($.validationEngine.settings.allrules[customAjaxRule].alertTextOk){	// NO OK TEXT MEAN CLOSE PROMPT
 												$.validationEngine.updatePromptText(ajaxCaller,$.validationEngine.settings.allrules[customAjaxRule].alertTextOk,"pass",true);
@@ -392,10 +392,10 @@ $.validationEngine = {
 						$(caller).animate({opacity: 0, height: 0}, function(){
 							$(caller).css("display","none");
 							$(caller).before("<div class='ajaxSubmit'>"+$.validationEngine.settings.ajaxSubmitMessage+"</div>");
-							$.validationEngine.closePrompt(".formError",true); 
+							$.validationEngine.closePrompt(".formError",true);
 							$(".ajaxSubmit").show("slow");
 							if ($.validationEngine.settings.success){	// AJAX SUCCESS, STOP THE LOCATION UPDATE
-								$.validationEngine.settings.success && $.validationEngine.settings.success(); 
+								$.validationEngine.settings.success && $.validationEngine.settings.success();
 								return false;
 							}
 						})
@@ -420,12 +420,12 @@ $.validationEngine = {
 			if(!$.validationEngine.settings.beforeSuccess()){
 				if ($.validationEngine.settings.success){	// AJAX SUCCESS, STOP THE LOCATION UPDATE
 					if($.validationEngine.settings.unbindEngine){ $(caller).unbind("submit") }
-					$.validationEngine.settings.success && $.validationEngine.settings.success(); 
+					$.validationEngine.settings.success && $.validationEngine.settings.success();
 					return true;
 				}
 			}else{
 				return true;
-			} 
+			}
 		return false;
 	},
 	buildPrompt : function(caller,promptText,type,ajaxed) {			// ERROR PROMPT CREATION AND DISPLAY WHEN AN ERROR OCCUR
@@ -521,7 +521,7 @@ $.validationEngine = {
 	},
 	linkTofield : function(caller){
 		linkTofield = $(caller).attr("id") + "formError";
-		linkTofield = linkTofield.replace(/\[/g,""); 
+		linkTofield = linkTofield.replace(/\[/g,"");
 		linkTofield = linkTofield.replace(/\]/g,"");
 		return linkTofield;
 	},
