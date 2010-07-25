@@ -127,7 +127,7 @@ $.validationEngine = {
 		$.validationEngine.showTriangle = true;
 		callerType = $(caller).attr("type");
 
-		for (i=0; i<rules.length;i++){
+		for (i=0; i<rules.length; i++){
 			switch (rules[i]){
 			case "optional":
 				if(!$(caller).val()){
@@ -274,7 +274,6 @@ $.validationEngine = {
 					data: "validateValue="+fieldValue+"&validateId="+fieldId+"&validateError="+customAjaxRule+extraData,
 					beforeSend: function(){		// BUILD A LOADING PROMPT IF LOAD TEXT EXIST
 						if($.validationEngine.settings.allrules[customAjaxRule].alertTextLoad){
-
 							if(!$("div."+fieldId+"formError")[0]){
 								return $.validationEngine.buildPrompt(ajaxCaller,$.validationEngine.settings.allrules[customAjaxRule].alertTextLoad,"load");
 							}else{
@@ -341,9 +340,9 @@ $.validationEngine = {
 
 			startLength = eval(rules[position+1]);
 			endLength = eval(rules[position+2]);
-			feildLength = $(caller).attr('value').length;
+			fieldLength = $(caller).attr('value').length;
 
-			if(feildLength<startLength || feildLength>endLength){
+			if(fieldLength<startLength || fieldLength>endLength){
 				$.validationEngine.isValid = false;
 				promptText += $.validationEngine.settings.allrules["length"].alertText+startLength+$.validationEngine.settings.allrules["length"].alertText2+endLength+$.validationEngine.settings.allrules["length"].alertText3+"<br />"
 			}
